@@ -32,6 +32,8 @@ dependencies:
   font_awesome_flutter:
   url_launcher:
   strings:
+  image_picker:
+  image_cropper:
   dio:
   hive:
   hive_flutter:

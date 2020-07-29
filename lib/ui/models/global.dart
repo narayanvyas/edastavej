@@ -21,8 +21,8 @@ Box userBox;
 
 BaseOptions options = BaseOptions(
   baseUrl: apiBaseUrl,
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
+  connectTimeout: 50000,
+  receiveTimeout: 30000,
 );
 Dio dio = Dio(options);
 

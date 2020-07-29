@@ -53,8 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       'grant_type': 'password'
     };
     try {
-      Response response;
-      response = await dio.post("/token",
+      Response response = await dio.post("/token",
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: userData);
 
@@ -160,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
             )
           : Scaffold(
               resizeToAvoidBottomPadding: false,
+              backgroundColor: Theme.of(context).primaryColor,
               key: _scaffoldKey,
               body: Container(
                 width: double.infinity,
@@ -177,165 +177,185 @@ class _LoginPageState extends State<LoginPage> {
   Widget getLoginUi() {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-      child: ListView(
+      height: 500,
+      child: Column(
         children: <Widget>[
-          SizedBox(height: 80),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Expanded(
+            child: ListView(
               children: <Widget>[
-                Text(
-                  "Log In",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
-                      fontWeight: FontWeight.w500),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Text(
-                    "Welcome Back",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                Container(
+                  color: Theme.of(context).primaryColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 40),
+                            Text(
+                              "Log In",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: Text(
+                                "Welcome Back",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                            ),
+                            SizedBox(height: 30),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          SizedBox(height: 50),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(60),
-                    topRight: Radius.circular(60))),
-            child: Padding(
-              padding: EdgeInsets.all(30),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 60),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                Container(
+                  decoration: BoxDecoration(
                       color: Colors.white,
-                    ),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(60),
+                          topRight: Radius.circular(60))),
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
                     child: Column(
                       children: <Widget>[
+                        SizedBox(height: 60),
                         Container(
-                          padding: EdgeInsets.only(top: 10),
                           decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(color: Colors.grey[200]))),
-                          child: TextFormField(
-                            controller: loginEmailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Icon(
-                                    Icons.mail_outline,
-                                    color: Colors.grey,
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(top: 10),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey[200]))),
+                                child: TextFormField(
+                                  controller: loginEmailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                      prefixIcon: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: Icon(
+                                          Icons.mail_outline,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      hintText: 'Email ',
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 10),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey[200]))),
+                                child: TextFormField(
+                                  controller: loginPasswordController,
+                                  obscureText: _obscureTextLogin,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Icon(
+                                        Icons.lock,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    hintText: 'Password',
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                    border: InputBorder.none,
+                                    suffixIcon: GestureDetector(
+                                      onTap: _toggleLogin,
+                                      child: Icon(
+                                        Icons.remove_red_eye,
+                                        size: 20.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                hintText: 'Email ',
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: InputBorder.none),
+                              ),
+                            ],
                           ),
                         ),
+                        SizedBox(height: 80),
+                        InkWell(
+                          onTap: () async {},
+                          child: Text(
+                            "Forgot Password?",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                        SizedBox(height: 60),
                         Container(
-                          padding: EdgeInsets.only(top: 10),
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(color: Colors.grey[200]))),
-                          child: TextFormField(
-                            controller: loginPasswordController,
-                            obscureText: _obscureTextLogin,
-                            decoration: InputDecoration(
-                              prefixIcon: Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Icon(
-                                  Icons.lock,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              hintText: 'Password',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                              suffixIcon: GestureDetector(
-                                onTap: _toggleLogin,
-                                child: Icon(
-                                  Icons.remove_red_eye,
-                                  size: 20.0,
-                                  color: Colors.grey,
-                                ),
-                              ),
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: 45,
+                          child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: loadingIndicator
+                                  ? CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white))
+                                  : Text(
+                                      'Login',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16),
+                                    ),
+                              disabledColor: Colors.red[100],
+                              onPressed: loadingIndicator
+                                  ? null
+                                  : () async {
+                                      if (!regex
+                                          .hasMatch(loginEmailController.text))
+                                        displaySnackBar(
+                                            'Please Enter Valid Email Address',
+                                            _scaffoldKey);
+                                      else if (loginPasswordController
+                                              .text.length <
+                                          8)
+                                        displaySnackBar(
+                                            'Password Length Must Be Minimum 8 Characters',
+                                            _scaffoldKey);
+                                      else
+                                        await loginUser(
+                                            loginEmailController.text,
+                                            loginPasswordController.text);
+                                    }),
+                        ),
+                        SizedBox(height: 50),
+                        InkWell(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            setState(() {
+                              isLoginUi = false;
+                            });
+                          },
+                          child: Text(
+                            'Didn\'t have an account ? Sign Up here ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 80),
-                  InkWell(
-                    onTap: () async {},
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  SizedBox(height: 60),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    height: 45,
-                    child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        child: loadingIndicator
-                            ? CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white))
-                            : Text(
-                                'Login',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
-                              ),
-                        disabledColor: Colors.red[100],
-                        onPressed: loadingIndicator
-                            ? null
-                            : () async {
-                                if (!regex.hasMatch(loginEmailController.text))
-                                  displaySnackBar(
-                                      'Please Enter Valid Email Address',
-                                      _scaffoldKey);
-                                else if (loginPasswordController.text.length <
-                                    8)
-                                  displaySnackBar(
-                                      'Password Length Must Be Minimum 8 Characters',
-                                      _scaffoldKey);
-                                else
-                                  await loginUser(loginEmailController.text,
-                                      loginPasswordController.text);
-                              }),
-                  ),
-                  SizedBox(height: 50),
-                  InkWell(
-                    onTap: () {
-                      FocusScope.of(context).unfocus();
-                      setState(() {
-                        isLoginUi = false;
-                      });
-                    },
-                    child: Text(
-                      'Didn\'t have an account ? Sign Up here ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
