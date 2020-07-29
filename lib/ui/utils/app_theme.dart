@@ -10,7 +10,6 @@ class AppTheme {
         appBarTheme: AppBarTheme(
           color: Colors.deepPurple[900],
           elevation: 1,
-          // iconTheme: IconThemeData(color: Colors.black87)
         ),
         buttonTheme: ButtonThemeData(
           buttonColor: Color(0xFFE72744),

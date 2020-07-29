@@ -1,12 +1,13 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:edatavejapp/ui/models/config.dart';
 import 'package:flutter/material.dart';
-import '../models/config.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+
+import 'user_model.dart';
 
 //Variables
 var homeScreen;
-Future<SharedPreferences> storedUserData = SharedPreferences.getInstance();
-SharedPreferences storedUserDataHandler;
 bool loadingIndicator = false;
 BuildContext scaffoldContext;
 File profileImage;
@@ -14,17 +15,18 @@ Pattern pattern =
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 RegExp regex = RegExp(pattern);
 String name, email;
-// Woocommerce woocommerce = Woocommerce(
-//     url: WoocommerceCredentials.apiUrl,
-//     consumerKey: WoocommerceCredentials.consumerKey,
-//     consumerSecret: WoocommerceCredentials.consumerSecret);
-// final drawerController = ZoomDrawerController();
+
+User currentUser = User();
+Box userBox;
+
+BaseOptions options = BaseOptions(
+  baseUrl: apiBaseUrl,
+  connectTimeout: 5000,
+  receiveTimeout: 3000,
+);
+Dio dio = Dio(options);
 
 String logoBase64 = "";
-
-initSharedPreferences() async {
-  storedUserDataHandler = await storedUserData;
-}
 
 getFirstAndLastName(String name) {
   List<String> nameList = name.split(" ");

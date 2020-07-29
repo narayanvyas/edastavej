@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import '../pages/home.dart';
+import 'package:edatavejapp/ui/models/user_model.dart';
+import 'package:edatavejapp/ui/pages/home.dart';
+import 'package:hive/hive.dart';
 import '../utils/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import '../models/auth.dart';
-import '../models/error.dart';
-import '../models/user.dart';
 import '../models/global.dart';
-import 'dart:convert';
+import 'package:dio/dio.dart';
 
 bool showSplashScreen = true;
 
@@ -42,52 +41,42 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
-  loginCustomer(User user) async {
-    // var result = await woocommerce.customerLogin(user);
-    // if (result is! WooError) {
-    // WooCommerceAuthedUser wooAuthedUser = result;
-    // storedUserDataHandler.setString('token', wooAuthedUser.token);
-    // storedUserDataHandler.setString('email', wooAuthedUser.email);
-    // var loginResult =
-    //     await woocommerce.getCustomerByEmail(wooAuthedUser.email);
-    // if (loginResult is! WooError) {
-    //   var customer = loginResult;
-    //   storedUserDataHandler.setString('id', customer['id'].toString());
-    //   storedUserDataHandler.setString('first_name', customer['first_name']);
-    //   storedUserDataHandler.setString('last_name', customer['last_name']);
-    //   storedUserDataHandler.setString('profile_url', customer['avatar_url']);
-    //   storedUserDataHandler.setString(
-    //       'address', json.encode(customer['billing_address']));
-    //   Navigator.of(context).push(MaterialPageRoute(
-    //       builder: (BuildContext context) => Home(
-    //             forceRefreshData: true,
-    //           )));
-    // } else {
-    //   WooError err = loginResult;
-    //   print(err.message);
-    // }
-    // } else {
-    //   WooError err = result;
-    //   print(err.message);
-    //   displaySnackBar('Invalid Password', _scaffoldKey);
-    // }
+  loginUser(String email, String password) async {
+    // Map<String, dynamic> userData = {
+    //   'username': 'admin@edastavej.com',
+    //   'password': 'edast@vej#2220',
+    //   'grant_type': 'password'
+    // };
+    Map<String, dynamic> userData = {
+      'username': email,
+      'password': password,
+      'grant_type': 'password'
+    };
+    try {
+      Response response;
+      response = await dio.post("/token",
+          options: Options(contentType: Headers.formUrlEncodedContentType),
+          data: userData);
+
+      User tmpUser = User(
+          email: email,
+          accessToken: 'Bearer ' + response.data['access_token'],
+          isAdmin: false);
+
+      if (!userBox.isOpen) userBox = await Hive.openBox('userBox');
+      userBox.put('email', tmpUser.email);
+      userBox.put('access_token', tmpUser.accessToken);
+      userBox.put('isAdmin', tmpUser.isAdmin);
+      setState(() => currentUser = tmpUser);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (BuildContext context) => Home()));
+    } catch (e) {
+      displaySnackBar(
+          'Invalid Username or Password, Please Try Again', _scaffoldKey);
+    }
   }
 
-  Future createUser(String email, String password, Map name) async {
-    User user = User(
-        email: email,
-        username: email,
-        password: password,
-        firstName: name['firstName'],
-        lastName: name['lastName']);
-    // var result = await woocommerce.customerSignUp(user);
-    // if (result is! WooError) {
-    //   await loginCustomer(User(username: email, password: password));
-    // } else {
-    //   WooError err = result;
-    //   print(err.message);
-    // }
-  }
+  Future createUser(String email, String password, Map name) async {}
 
   void _toggleLogin() {
     setState(() {
@@ -214,9 +203,8 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-          SizedBox(height: 20),
-          Expanded(
-              child: Container(
+          SizedBox(height: 50),
+          Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -288,13 +276,9 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 60),
+                  SizedBox(height: 80),
                   InkWell(
-                    onTap: () {
-                      setState(() {
-                        _isPasswordResetPage = true;
-                      });
-                    },
+                    onTap: () async {},
                     child: Text(
                       "Forgot Password?",
                       style: TextStyle(color: Colors.grey),
@@ -320,37 +304,18 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: loadingIndicator
                             ? null
                             : () async {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) => Home()));
-                                // FocusScope.of(context).unfocus();
-                                // if (!regex.hasMatch(loginEmailController.text))
-                                //   displaySnackBar("Please Enter Valid Email ID",
-                                //       _scaffoldKey);
-                                // else if (loginPasswordController.text.length <
-                                //     8)
-                                //   displaySnackBar("Please Enter Valid Password",
-                                //       _scaffoldKey);
-                                // else {
-                                //   setState(() {
-                                //     loadingIndicator = true;
-                                //   });
-                                //   // if (!await woocommerce
-                                //   //     .checkIfAlreadyRegisteredByEmail(
-                                //   //         loginEmailController.text)) {
-                                //   //   displaySnackBar('Email ID Not Registered',
-                                //   //       _scaffoldKey);
-                                //   //   setState(() {
-                                //   //     loadingIndicator = false;
-                                //   //   });
-                                //   //   return;
-                                //   // }
-                                //   await loginCustomer(User(
-                                //       username: loginEmailController.text,
-                                //       password: loginPasswordController.text));
-                                //   setState(() {
-                                //     loadingIndicator = false;
-                                //   });
-                                // }
+                                if (!regex.hasMatch(loginEmailController.text))
+                                  displaySnackBar(
+                                      'Please Enter Valid Email Address',
+                                      _scaffoldKey);
+                                else if (loginPasswordController.text.length <
+                                    8)
+                                  displaySnackBar(
+                                      'Password Length Must Be Minimum 8 Characters',
+                                      _scaffoldKey);
+                                else
+                                  await loginUser(loginEmailController.text,
+                                      loginPasswordController.text);
                               }),
                   ),
                   SizedBox(height: 50),
@@ -369,11 +334,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
                 ],
               ),
             ),
-          )),
+          ),
         ],
       ),
     );
@@ -539,17 +503,6 @@ class _LoginPageState extends State<LoginPage> {
                                   setState(() {
                                     loadingIndicator = true;
                                   });
-                                  // if (await woocommerce
-                                  //     .checkIfAlreadyRegisteredByEmail(
-                                  //         signupEmailController.text)) {
-                                  //   displaySnackBar(
-                                  //       'Email ID Already Registered',
-                                  //       _scaffoldKey);
-                                  //   setState(() {
-                                  //     loadingIndicator = false;
-                                  //   });
-                                  //   return;
-                                  // }
                                   var name = getFirstAndLastName(
                                       signupNameController.text);
                                   await createUser(signupEmailController.text,
@@ -576,7 +529,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
                 ],
               ),
             ),
@@ -661,19 +613,6 @@ class _LoginPageState extends State<LoginPage> {
                               setState(() {
                                 loadingIndicator = true;
                               });
-                              // var response =
-                              //     await woocommerce.getForgotPassword(
-                              //         passwordResetEmailController.text);
-                              // if (response)
-                              //   displaySnackBar(
-                              //       'A password reset email has been sent to your email. Kindly check your email account',
-                              //       _scaffoldKey);
-                              // else
-                              //   displaySnackBar(
-                              //       'Email ID Not Registered', _scaffoldKey);
-                              // setState(() {
-                              //   loadingIndicator = false;
-                              // });
                             }
                           }),
               ),

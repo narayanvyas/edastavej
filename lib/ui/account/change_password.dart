@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/error.dart';
 import '../models/global.dart';
-import '../models/user.dart';
+import '../models/user_model.dart';
 
 class ChangePassword extends StatefulWidget {
   @override
@@ -28,22 +27,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   void _toggleConfirmNewPassword() => setState(
       () => _obscureTextConfirmNewPassword = !_obscureTextConfirmNewPassword);
-  loginCustomer(User user) async {
-    // var result = await woocommerce.customerLogin(user);
-    // if (result is! WooError) {
-    //   setState(() => isValidOldPassword = true);
-    // } else {
-    //   WooError err = result;
-    //   print(err.message);
-    //   if (err.code == '[jwt_auth] too_many_retries')
-    //     displaySnackBar(
-    //         'You entered wrong old password too many times, please try again after 30 minutes.',
-    //         _scaffoldKey);
-    //   else
-    //     displaySnackBar(
-    //         'Old Password Is Wrong, Please Try Again', _scaffoldKey);
-    // }
-  }
+  loginCustomer(User user) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -131,19 +115,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                     setState(() {
                       isUpdatingData = true;
                     });
-                    // var response = await woocommerce.getForgotPassword(
-                    //     storedUserDataHandler.getString('email'));
-                    // if (response)
-                    //   displaySnackBar(
-                    //       'A password reset email has been sent to your email. Kindly check your email account',
-                    //       _scaffoldKey);
-                    // else
-                    //   displaySnackBar(
-                    //       'Error! Something Went Wrong, Please Try Again Later',
-                    //       _scaffoldKey);
-                    // setState(() {
-                    //   isUpdatingData = false;
-                    // });
                   },
                   child: Text(
                     'Forgot Current Password?',
@@ -191,21 +162,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                   _scaffoldKey);
             else {
               setState(() => isUpdatingData = true);
-              await loginCustomer(User(
-                  username: storedUserDataHandler.getString('email'),
-                  password: _oldPasswordController.text));
-              if (isValidOldPassword) {
-                Map<String, dynamic> data = {
-                  'password': _newPasswordController.text
-                };
-                // var response = woocommerce.putReq(
-                //     'customers/${storedUserDataHandler.getString('id')}', data);
-                // if (response is! WooError)
-                //   displaySnackBar(
-                //       'Password Updated Successfully', _scaffoldKey);
-                // else
-                //   displaySnackBar('Error Updating Password', _scaffoldKey);
-              }
               setState(() => isUpdatingData = false);
             }
           },

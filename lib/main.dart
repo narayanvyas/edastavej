@@ -1,20 +1,26 @@
+import 'package:edatavejapp/ui/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'ui/account/login_page.dart';
-import 'ui/models/app_theme.dart';
+import 'ui/utils/app_theme.dart';
 import 'ui/models/global.dart';
 import 'ui/pages/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initSharedPreferences();
-  // if (storedUserDataHandler.getString('token') == null ||
-  //     storedUserDataHandler.getString('token') == '')
-  //   homeScreen = LoginPage();
-  // else {
-  //   homeScreen = Home();
-  // }
 
-  homeScreen = Home();
+  // Initialize Hive
+  var dir = await getApplicationDocumentsDirectory();
+  Hive.init(dir.path);
+  Hive.registerAdapter(UserAdapter());
+  userBox = await Hive.openBox('userBox');
+  if (userBox.get('access_token') == null || userBox.get('access_token') == '')
+    homeScreen = LoginPage();
+  else
+    homeScreen = Home();
+
+  // Initialize Dio
 
   runApp(MaterialApp(
     title: "eDastavej",

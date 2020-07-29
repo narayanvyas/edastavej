@@ -1,13 +1,10 @@
 import 'dart:io';
+import 'package:edatavejapp/ui/account/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/global.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'admin/about_trainer.dart';
-import '../account/login_page.dart';
-// import 'account/profile.dart';
 
 File _image;
 bool isLoadingImage = false;
@@ -85,7 +82,8 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                             ),
                           )),
                     ),
-          accountEmail: Text(email == null ? "" : email),
+          accountEmail:
+              Text(currentUser.email == null ? "" : currentUser.email),
           accountName: Text(name == null ? "" : name),
         ),
         Positioned(
@@ -249,20 +247,10 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   Future signOutUser() async {
-    // FirebaseAuth _auth = FirebaseAuth.instance;
-    // await _auth.signOut();
-    // await _auth.signInAnonymously();
-    // await _auth.currentUser().then((user) {
-    //   setState(() {
-    //     firebaseUser = user;
-    //   });
-    // });
-    // setState(() {
-    //   name = "";
-    //   email = "";
-    // });
-    // Navigator.of(context).push(
-    //     MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
+    userBox.deleteFromDisk();
+    currentUser = null;
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
   }
 }
 

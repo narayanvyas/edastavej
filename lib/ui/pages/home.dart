@@ -1,10 +1,11 @@
 import 'package:edatavejapp/ui/admin/add_users.dart';
-
+import 'package:edatavejapp/ui/models/global.dart';
+import 'package:edatavejapp/ui/models/user_model.dart';
 import '../account/login_page.dart';
-import '../models/global.dart';
 import '../utils/splash_screen.dart';
 import 'package:flutter/material.dart';
-import '../models/drawer.dart';
+import '../utils/drawer.dart';
+import 'all_services.dart';
 import 'services.dart';
 
 class Home extends StatefulWidget {
@@ -15,6 +16,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   refresh() => setState(() {});
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = User(
+        email: userBox.get('email'),
+        accessToken: userBox.get('access_token'),
+        isAdmin: userBox.get('isAdmin'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return showSplashScreen
@@ -47,6 +58,12 @@ class _HomeState extends State<Home> {
 
   dynamic buildDashboard() {
     return [
+      GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => AllServices()));
+          },
+          child: generateGridItem('All Services', Icons.filter, Colors.red)),
       GestureDetector(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(

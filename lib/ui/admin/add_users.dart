@@ -23,6 +23,13 @@ class _AddUsersState extends State<AddUsers> {
     'Employee'
   ];
   String _currentlySelectedRole;
+  bool status = false;
+
+  void initState() {
+    super.initState();
+    status = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,6 +150,20 @@ class _AddUsersState extends State<AddUsers> {
                   });
                 },
                 value: _currentlySelectedRole,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Row(
+                children: <Widget>[
+                  Text('Status'),
+                  Checkbox(
+                    value: status,
+                    onChanged: (bool value) {
+                      setState(() => status = value);
+                    },
+                  ),
+                ],
               ),
             ),
             Padding(

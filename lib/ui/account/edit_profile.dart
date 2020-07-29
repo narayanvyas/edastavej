@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../models/error.dart';
 import '../models/global.dart';
-
 import 'change_password.dart';
 
 class EditProfile extends StatefulWidget {
@@ -20,10 +18,6 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = storedUserDataHandler.getString('first_name') +
-        ' ' +
-        storedUserDataHandler.getString('last_name');
-    _emailController.text = storedUserDataHandler.getString('email');
   }
 
   @override
@@ -71,8 +65,7 @@ class _EditProfileState extends State<EditProfile> {
                           placeholder: (context, url) => Container(),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
-                          imageUrl:
-                              storedUserDataHandler.getString('profile_url'),
+                          imageUrl: '',
                         ),
                       ),
                     ),
@@ -160,23 +153,6 @@ class _EditProfileState extends State<EditProfile> {
               displaySnackBar('Please Enter A Valid Name', _scaffoldKey);
             } else {
               setState(() => isUpdatingData = true);
-              var name = getFirstAndLastName(_nameController.text);
-              Map<String, dynamic> data = {
-                'first_name': name['firstName'],
-                'last_name': name['lastName']
-              };
-              // var response;
-              // response = await woocommerce.putReq(
-              //     'customers/${storedUserDataHandler.getString('id')}', data);
-              // if (response is! WooError) {
-              //   storedUserDataHandler.setString(
-              //       'first_name', name['firstName']);
-              //   storedUserDataHandler.setString('last_name', name['lastName']);
-              //   widget.notifyParent();
-              //   displaySnackBar(
-              //       'Profile Details Updated Successfully', _scaffoldKey);
-              // } else
-              //   displaySnackBar('Error Updating Successfully', _scaffoldKey);
             }
             setState(() => isUpdatingData = false);
           },

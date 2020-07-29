@@ -1,4 +1,3 @@
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import '../account/login_page.dart';
 
@@ -51,10 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: animate ? 400 : 200,
                 height: animate ? 400 : 200,
                 child: Center(
-                  child: FlareActor("assets/flare/splash_logo.flr",
-                      alignment: Alignment.center,
-                      fit: BoxFit.cover,
-                      animation: "idle"),
+                  child: Container(),
                 )),
             Container(
               margin: const EdgeInsets.only(top: 100),
