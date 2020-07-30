@@ -1,11 +1,11 @@
-import 'package:edatavejapp/ui/admin/add_users.dart';
-import 'package:edatavejapp/ui/models/global.dart';
-import 'package:edatavejapp/ui/models/user_model.dart';
+import 'package:flutter/material.dart';
+import '../models/global.dart';
+import '../models/user_model.dart';
 import '../account/login_page.dart';
 import '../utils/splash_screen.dart';
-import 'package:flutter/material.dart';
 import '../utils/drawer.dart';
-import 'all_services.dart';
+import 'admin/add_users.dart';
+import 'admin/all_services.dart';
 import 'services.dart';
 
 class Home extends StatefulWidget {

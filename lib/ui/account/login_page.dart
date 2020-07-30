@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:edatavejapp/ui/models/user_model.dart';
-import 'package:edatavejapp/ui/pages/home.dart';
+import '../models/user_model.dart';
+import '../pages/home.dart';
 import 'package:hive/hive.dart';
 import '../utils/splash_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../models/global.dart';

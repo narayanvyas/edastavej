@@ -1,4 +1,4 @@
-import 'package:edatavejapp/ui/models/global.dart';
+import '../../models/global.dart';
 import 'package:flutter/material.dart';
 
 class AddUsers extends StatefulWidget {

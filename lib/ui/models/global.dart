@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:edatavejapp/ui/models/config.dart';
+import '../models/config.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 

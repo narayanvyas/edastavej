@@ -38,6 +38,7 @@ dependencies:
   hive:
   hive_flutter:
   path_provider:
+  flutter_shimmer:
 
 dev_dependencies:
   hive_generator:
